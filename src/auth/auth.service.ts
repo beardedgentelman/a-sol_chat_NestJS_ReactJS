@@ -12,7 +12,10 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(email: string, password: string): Promise<any> {
+  async validateUser(
+    email: string,
+    password: string,
+  ): Promise<CreateUserDto | null> {
     const user = await this.usersService.findByEmail(email);
 
     if (user) {
@@ -31,7 +34,6 @@ export class AuthService {
 
   async register(dto: CreateUserDto) {
     try {
-      console.log(dto);
       const password = encodePassword(dto.password);
       const userData = await this.usersService.create({ ...dto, password });
 

@@ -6,13 +6,10 @@ export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: 'login', type: 'varchar' })
-  login: string;
-
-  @Column({ name: 'password', type: 'varchar' })
+  @Column({ name: 'password', type: 'varchar', nullable: true })
   password: string;
 
-  @Column({ name: 'email', type: 'varchar' })
+  @Column({ name: 'email', type: 'varchar', nullable: true })
   email: string;
 
   @OneToMany(() => FileEntity, (file) => file.user)

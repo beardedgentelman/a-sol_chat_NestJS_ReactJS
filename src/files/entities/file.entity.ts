@@ -7,6 +7,11 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
+export enum FileType {
+  PHOTO = 'photo',
+  TRASH = 'trash',
+}
+
 @Entity('files')
 export class FileEntity {
   @PrimaryGeneratedColumn()
