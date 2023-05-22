@@ -8,17 +8,18 @@ import {
   Post,
   Query,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { UserId } from 'src/decorators/user-id.decorator';
 import { FileType } from './entities/file.entity';
 import { FilesService } from './files.service';
 import { fileStorage } from './storage';
 
 @Controller('files')
-// TODO: Enable in prod
-// @UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
