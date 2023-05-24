@@ -7,6 +7,7 @@ import {
   ParseFilePipe,
   Post,
   Query,
+  Request,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -18,8 +19,8 @@ import { FileType } from './entities/file.entity';
 import { FilesService } from './files.service';
 import { fileStorage } from './storage';
 
-@Controller('files')
 @UseGuards(JwtAuthGuard)
+@Controller('files')
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
@@ -44,9 +45,12 @@ export class FilesController {
       }),
     )
     file: Express.Multer.File,
-    @UserId() userId: number,
+    //@UserId() userId: number,
+    @Request() body: any,
   ) {
-    return this.filesService.create(file, userId);
+    console.log(body);
+
+    return {};
   }
 
   @Delete()

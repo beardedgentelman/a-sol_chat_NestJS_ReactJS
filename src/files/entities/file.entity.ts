@@ -20,8 +20,8 @@ export class FileEntity {
   @Column()
   filename: string;
 
-  @Column()
-  originalname: string;
+  @Column({ nullable: true })
+  originalname: string | null;
 
   @Column()
   size: number;

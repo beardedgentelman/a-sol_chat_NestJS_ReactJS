@@ -8,22 +8,10 @@ import { UserEntity } from './entities/users.entity';
 export class UsersService {
   constructor(
     @InjectRepository(UserEntity)
-    private repository: Repository<UserEntity>,
+    private userRepository: Repository<UserEntity>,
   ) {}
 
-  findByEmail(email: string) {
-    return this.repository.findOneBy({
-      email,
-    });
-  }
-
-  findById(id: number) {
-    return this.repository.findOneBy({
-      id,
-    });
-  }
-
   create(dto: CreateUserDto) {
-    return this.repository.save(dto);
+    return this.userRepository.save(dto);
   }
 }

@@ -10,7 +10,7 @@ async function bootstrap() {
 
   app.enableCors({
     credentials: true,
-    origin: /http:\/\/localhost:8080\//i,
+    origin: /http:\/\/localhost:3000\//i,
   });
   app.use('../uploads', express.static(join(__dirname, '..', 'uploads')));
 
