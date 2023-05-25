@@ -26,8 +26,6 @@ export class jwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException('You have no access');
     }
 
-    return {
-      id: user.id,
-    };
+    return user.id;
   }
 }

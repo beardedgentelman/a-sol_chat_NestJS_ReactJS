@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule as NestTypeOrmModule } from '@nestjs/typeorm';
-// import { FileEntity } from 'src/files/entities/file.entity';
-// import { UserEntity } from 'src/users/entities/users.entity';
+// import { FilesEntity } from 'src/files/entities/file.entity';
+// import { UsersEntity } from 'src/users/entities/users.entity';
 import { join } from 'path';
 
-const entitiesPath = join(__dirname, '..', '/**/**/*.entity{.ts,.js}');
+const entitiesPath = join(__dirname, '..', '/**/*.entity{.ts,.js}');
 
 @Module({
   imports: [
@@ -22,7 +22,7 @@ const entitiesPath = join(__dirname, '..', '/**/**/*.entity{.ts,.js}');
         username: configService.get('POSTGRES_USER'),
         password: configService.get('POSTGRES_PASSWORD'),
         database: configService.get('POSTGRES_DATABASE'),
-        // entities: [UserEntity, FileEntity],
+        // entities: [UsersEntity, FilesEntity],
         entities: [entitiesPath],
         autoLoadEntities: true,
         synchronize: true,
