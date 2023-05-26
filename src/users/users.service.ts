@@ -11,11 +11,11 @@ export class UsersService {
     private userRepository: Repository<UserEntity>,
   ) {}
 
-  create(dto: CreateUserDto) {
+  async create(dto: CreateUserDto) {
     return this.userRepository.save(dto);
   }
 
-  updateOne(id: number, dto: UserEntity) {
+  async updateOne(id: number, dto: UserEntity) {
     return this.userRepository.update(id, dto);
   }
 
