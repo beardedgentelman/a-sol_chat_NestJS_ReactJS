@@ -5,10 +5,10 @@ export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: 'password', type: 'varchar', nullable: true })
+  @Column({ name: 'password', type: 'varchar' })
   password: string;
 
-  @Column({ name: 'email', type: 'varchar', nullable: true })
+  @Column({ name: 'email', type: 'varchar' })
   email: string;
 
   @Column({ name: 'userAvatar', type: 'bytea', nullable: true })

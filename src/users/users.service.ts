@@ -11,12 +11,12 @@ export class UsersService {
     private userRepository: Repository<UserEntity>,
   ) {}
 
-  async create(dto: CreateUserDto) {
-    return this.userRepository.save(dto);
+  async create(userDto: CreateUserDto) {
+    return this.userRepository.save(userDto);
   }
 
-  async updateOne(id: number, dto: UserEntity) {
-    return this.userRepository.update(id, dto);
+  async updateOne(id: number, userDto: UserEntity) {
+    return this.userRepository.update(id, userDto);
   }
 
   async uploadFile(file: Express.Multer.File, id: number) {

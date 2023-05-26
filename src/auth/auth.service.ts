@@ -36,10 +36,10 @@ export class AuthService {
     return null;
   }
 
-  async register(dto: CreateUserDto) {
+  async register(userDto: CreateUserDto) {
     try {
-      const password = encodePassword(dto.password);
-      const userData = await this.usersService.create({ ...dto, password });
+      const password = encodePassword(userDto.password);
+      const userData = await this.usersService.create({ ...userDto, password });
 
       return {
         token: this.jwtService.sign({ id: userData.id }),
@@ -52,8 +52,8 @@ export class AuthService {
     }
   }
 
-  async login(dto: CreateUserDto) {
-    const { email } = dto;
+  async login(userDto: CreateUserDto) {
+    const { email } = userDto;
     const user = await this.userRepository.findOneBy({ email: email });
     return {
       token: await this.jwtService.signAsync({ id: user.id }),
