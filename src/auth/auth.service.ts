@@ -36,7 +36,7 @@ export class AuthService {
     return null;
   }
 
-  async register(userDto: CreateUserDto) {
+  async registration(userDto: CreateUserDto) {
     try {
       const password = encodePassword(userDto.password);
       const userData = await this.usersService.create({ ...userDto, password });
