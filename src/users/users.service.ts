@@ -11,7 +11,15 @@ export class UsersService {
     private userRepository: Repository<UserEntity>,
   ) {}
 
-  async create(userDto: CreateUserDto) {
+  async create(email: string, userDto: CreateUserDto) {
+    const userEmail = await this.userRepository.findOne({
+      where: { email: email },
+    });
+
+    if (userEmail) {
+      console.log('User with this email already exist!');
+      return null;
+    }
     return this.userRepository.save(userDto);
   }
 
