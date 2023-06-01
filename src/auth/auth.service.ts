@@ -43,6 +43,7 @@ export class AuthService {
 
       return {
         token: this.jwtService.sign({ id: userData.id }),
+        user: userData,
       };
     } catch (err) {
       console.log(err);
