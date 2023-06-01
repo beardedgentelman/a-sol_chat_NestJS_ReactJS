@@ -50,10 +50,7 @@ export class AuthService {
         user: userData,
       };
     } catch (err) {
-      console.log(err);
-      throw new ForbiddenException(
-        'Oops... something goes wrong. Registration error.',
-      );
+      throw new ForbiddenException(err.message);
     }
   }
 
