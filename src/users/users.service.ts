@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -17,7 +17,7 @@ export class UsersService {
     });
 
     if (userEmail) {
-      throw new ForbiddenException('User with this email already exist!');
+      throw new ConflictException('A user with this email already exist!');
     }
     return this.userRepository.save(userDto);
   }

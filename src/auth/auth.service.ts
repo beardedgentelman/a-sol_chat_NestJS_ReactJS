@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
@@ -50,7 +50,7 @@ export class AuthService {
         user: userData,
       };
     } catch (err) {
-      throw new ForbiddenException(err.message);
+      throw new ConflictException(err.message);
     }
   }
 
