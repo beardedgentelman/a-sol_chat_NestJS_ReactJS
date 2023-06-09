@@ -2,7 +2,7 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { UserEntity } from 'src/users/entities/users.entity';
+import { UserEntity } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { comparePasswords, encodePassword } from 'src/utils/bcrypt';
 import { Repository } from 'typeorm';
@@ -36,7 +36,7 @@ export class AuthService {
     return null;
   }
 
-  async registration(userDto: CreateUserDto) {
+  async registration(userDto: CreateUserDto): Promise<{ token: string }> {
     try {
       const password = encodePassword(userDto.password);
       const email = userDto.email;
@@ -47,7 +47,6 @@ export class AuthService {
 
       return {
         token: this.jwtService.sign({ id: userData.id }),
-        user: userData,
       };
     } catch (err) {
       throw new ConflictException(err.message);
