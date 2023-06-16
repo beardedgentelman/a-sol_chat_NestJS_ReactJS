@@ -1,30 +1,33 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { UserEntity } from 'src/users/entities/user.entity';
+import { v4 as uuidv4 } from 'uuid';
 
 export type MessageDocument = Message & Document;
 
 @Schema()
 export class Message {
   @Prop()
+  chatId: number;
+
+  @Prop({ default: () => uuidv4() })
   messageId: string;
 
   @Prop()
   messageText: string;
 
   @Prop()
-  user: UserEntity;
+  userId: number;
 
-  @Prop()
-  date: string;
+  @Prop({ default: Date.now })
+  date: Date;
 
-  @Prop()
+  @Prop({ default: true })
   isSend: boolean;
 
-  @Prop()
+  @Prop({ default: false })
   isDelivered: boolean;
 
-  @Prop()
+  @Prop({ default: false })
   isRead: boolean;
 }
 
