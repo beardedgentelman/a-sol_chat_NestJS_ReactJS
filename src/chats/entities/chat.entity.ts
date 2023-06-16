@@ -21,9 +21,6 @@ export class ChatEntity {
   @ManyToMany(() => UserEntity, (user) => user.chats)
   users: UserEntity[];
 
-  @Column({ name: 'messages', type: 'varchar', array: true, nullable: true })
-  messages: string[];
-
   @CreateDateColumn({
     type: 'timestamp without time zone',
     name: 'created_at',

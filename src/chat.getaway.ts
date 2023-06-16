@@ -10,9 +10,9 @@ export class ChatGetaway {
   @WebSocketServer()
   server;
 
-  @SubscribeMessage('message')
+  @SubscribeMessage('messages')
   handleMessage(@MessageBody() message: string): void {
     console.log(message);
-    this.server.emit('message', message);
+    this.server.emit('messages', message);
   }
 }
