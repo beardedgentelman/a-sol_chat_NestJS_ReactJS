@@ -2,7 +2,7 @@ import { ClassSerializerInterceptor } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8088;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
