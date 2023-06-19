@@ -4,7 +4,7 @@ import {
   Request,
   UploadedFile,
   UseGuards,
-  UseInterceptors,
+  UseInterceptors
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';

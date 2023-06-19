@@ -22,9 +22,9 @@ export class ChatsService {
     const user = await this.userRepository.findOneBy({ id });
     const userToChat = {
       id: user.id,
-      username: user.username,
+      username: user.name,
       email: user.email,
-      userAvatar: user.userAvatar,
+      userAvatar: user.avatar,
     };
     const newChat = this.chatRepository.create({
       ...chatDto,
