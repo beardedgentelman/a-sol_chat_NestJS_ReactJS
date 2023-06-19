@@ -36,7 +36,9 @@ export class AuthService {
     return null;
   }
 
-  async registration(userDto: CreateUserDto): Promise<{ token: string }> {
+  async registration(
+    userDto: CreateUserDto,
+  ): Promise<{ token: string; user: UserEntity }> {
     try {
       const password = encodePassword(userDto.password);
       const email = userDto.email;
@@ -44,20 +46,25 @@ export class AuthService {
         ...userDto,
         password,
       });
+      const user = await this.userRepository.findOneBy({ email: email });
 
       return {
         token: this.jwtService.sign({ id: userData.id }),
+        user: user,
       };
     } catch (err) {
       throw new ConflictException(err.message);
     }
   }
 
-  async login(userDto: CreateUserDto) {
+  async login(
+    userDto: CreateUserDto,
+  ): Promise<{ token: string; user: UserEntity }> {
     const { email } = userDto;
     const user = await this.userRepository.findOneBy({ email: email });
     return {
       token: await this.jwtService.signAsync({ id: user.id }),
+      user: user,
     };
   }
 }

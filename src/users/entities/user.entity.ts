@@ -14,7 +14,7 @@ export class UserEntity {
   id: number;
 
   @Column({ name: 'name', type: 'varchar' })
-  username: string;
+  name: string;
 
   @Column({ name: 'email', type: 'varchar' })
   email: string;
@@ -24,7 +24,7 @@ export class UserEntity {
   password: string;
 
   @Column({ name: 'userAvatar', type: 'bytea', nullable: true })
-  userAvatar: string;
+  avatar: string;
 
   @ManyToMany(() => ChatEntity, (chat) => chat.users)
   @JoinTable({ name: 'user_chat' })

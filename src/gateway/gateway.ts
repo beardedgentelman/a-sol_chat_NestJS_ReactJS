@@ -1,11 +1,12 @@
 import { OnModuleInit } from '@nestjs/common';
 import {
-  WebSocketGateway,
-  SubscribeMessage,
+  ConnectedSocket,
   MessageBody,
+  SubscribeMessage,
+  WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway(8082, {
   cors: {
@@ -27,11 +28,7 @@ export class ChatGateway implements OnModuleInit {
   }
 
   @SubscribeMessage('newMessage')
-  onNewMessage(@MessageBody() body: any) {
-    console.log(body);
-    this.server.emit('onMessage', {
-      msg: 'New Message',
-      content: body,
-    });
+  onNewMessage(@MessageBody() body: any, @ConnectedSocket() socket: Socket) {
+    this.server.emit('onMessage', body);
   }
 }
