@@ -28,13 +28,13 @@ export class ChatOwnerGuard implements CanActivate {
 
   private async validateOwnership(
     userId: number,
-    chatId: number,
+    id: number,
   ): Promise<boolean> {
-    const chat = await this.chatRepository.findOneBy({ chatId });
+    const chat = await this.chatRepository.findOneBy({ id });
     if (!chat) {
       throw new NotFoundException('Chat not found!');
     }
-    if (userId !== chat.owner) {
+    if (userId !== chat.ownerId) {
       throw new ForbiddenException('You are not the owner of this chat');
     }
 

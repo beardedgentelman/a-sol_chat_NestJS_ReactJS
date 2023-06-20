@@ -10,10 +10,10 @@ import {
 @Entity('chats')
 export class ChatEntity {
   @PrimaryGeneratedColumn()
-  chatId: number;
+  id: number;
 
   @Column({ name: 'owner', type: 'numeric' })
-  owner: number;
+  ownerId: number;
 
   @Column({ name: 'name', type: 'varchar' })
   name: string;

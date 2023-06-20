@@ -28,7 +28,7 @@ export class ChatsService {
     };
     const newChat = this.chatRepository.create({
       ...chatDto,
-      owner: id,
+      ownerId: id,
       users: [userToChat],
     });
 
@@ -38,7 +38,7 @@ export class ChatsService {
   async joinChat(id: number, chatId: number) {
     const user = await this.userRepository.findOneBy({ id });
     const chat = await this.chatRepository.findOne({
-      where: { chatId: chatId },
+      where: { id: chatId },
       relations: ['users'],
     });
     if (!user) {
@@ -60,7 +60,7 @@ export class ChatsService {
   async leaveChat(id: number, chatId: number) {
     const user = await this.userRepository.findOneBy({ id });
     const chat = await this.chatRepository.findOne({
-      where: { chatId: chatId },
+      where: { id: chatId },
       relations: ['users'],
     });
     const isUserInChat = chat.users.some((cUser) => cUser.id === user.id);
@@ -79,7 +79,7 @@ export class ChatsService {
 
   async deleteUserFromChat(chatId: number, userId: number) {
     const chat = await this.chatRepository.findOne({
-      where: { chatId: chatId },
+      where: { id: chatId },
       relations: ['users'],
     });
     if (!chat) {
@@ -97,7 +97,7 @@ export class ChatsService {
 
   async deleteChat(chatId: number) {
     const chat = await this.chatRepository.findOne({
-      where: { chatId: chatId },
+      where: { id: chatId },
       relations: ['users'],
     });
     if (!chat) {
