@@ -1,10 +1,11 @@
 import {
   Controller,
+  Get,
   Post,
   Request,
   UploadedFile,
   UseGuards,
-  UseInterceptors
+  UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
@@ -13,6 +14,13 @@ import { UsersService } from './users.service';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+  @UseGuards(JwtAuthGuard)
+  @Get('get-me')
+  async getMe(@Request() req) {
+    const result = await this.usersService.getMe(req);
+    return result;
+  }
 
   @UseGuards(JwtAuthGuard)
   @Post('upload')

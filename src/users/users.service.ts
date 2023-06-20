@@ -1,8 +1,11 @@
 import {
   ConflictException,
-  Injectable
+  Injectable,
+  UnauthorizedException,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Request } from 'express';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserEntity } from './entities/user.entity';
@@ -12,6 +15,7 @@ export class UsersService {
   constructor(
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
+    private jwtService: JwtService,
   ) {}
 
   async create(email: string, userDto: CreateUserDto): Promise<UserEntity> {
@@ -37,5 +41,28 @@ export class UsersService {
     await this.userRepository.save(user);
 
     return user;
+  }
+
+  async getMe(request: Request) {
+    const token = this.extractTokenFromHeader(request);
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+    try {
+      const decodedToken = await this.jwtService.verifyAsync(token, {
+        secret: process.env.SECRET_KEY,
+      });
+
+      const userId = decodedToken.id;
+      const user = await this.userRepository.findOneBy({ id: userId });
+      return user;
+    } catch {
+      throw new UnauthorizedException();
+    }
+  }
+
+  private extractTokenFromHeader(request: Request): string | undefined {
+    const [type, token] = request.headers.authorization?.split(' ') ?? [];
+    return type === 'Bearer' ? token : undefined;
   }
 }
