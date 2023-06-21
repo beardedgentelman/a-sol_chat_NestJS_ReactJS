@@ -54,7 +54,11 @@ export class UsersService {
       });
 
       const userId = decodedToken.id;
-      const user = await this.userRepository.findOneBy({ id: userId });
+      const user = await this.userRepository
+        .createQueryBuilder('user')
+        .where('user.id = :id', { id: userId })
+        .leftJoinAndSelect('user.chats', 'chat')
+        .getOne();
       return user;
     } catch {
       throw new UnauthorizedException();

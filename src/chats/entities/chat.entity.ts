@@ -18,6 +18,9 @@ export class ChatEntity {
   @Column({ name: 'name', type: 'varchar' })
   name: string;
 
+  @Column({ name: 'userAvatar', type: 'bytea', nullable: true })
+  avatar: string;
+
   @ManyToMany(() => UserEntity, (user) => user.chats)
   users: UserEntity[];
 

@@ -2,8 +2,11 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Request } from 'express';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { ChatDto } from './dto/chat.dto';
@@ -16,25 +19,37 @@ export class ChatsService {
     private chatRepository: Repository<ChatEntity>,
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
+    private jwtService: JwtService,
   ) {}
 
-  async createChat(id: number, chatDto: ChatDto) {
-    const user = await this.userRepository.findOneBy({ id });
-    const userToChat = {
-      id: user.id,
-      username: user.name,
-      email: user.email,
-      userAvatar: user.avatar,
-    };
-    const newChat = this.chatRepository.create({
-      ...chatDto,
-      ownerId: id,
-      users: [userToChat],
-    });
+  async createChat(request: Request, chatDto: ChatDto) {
+    const token = this.extractTokenFromHeader(request);
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+    try {
+      const decodedToken = await this.jwtService.verifyAsync(token, {
+        secret: process.env.SECRET_KEY,
+      });
 
-    return this.chatRepository.save(newChat);
+      const id = decodedToken.id;
+      const user = await this.userRepository.findOneBy({ id });
+      const userToChat = {
+        id: user.id,
+        username: user.name,
+        email: user.email,
+        userAvatar: user.avatar,
+      };
+      const newChat = this.chatRepository.create({
+        ...chatDto,
+        ownerId: id,
+        users: [userToChat],
+      });
+      return this.chatRepository.save(newChat);
+    } catch {
+      throw new UnauthorizedException();
+    }
   }
-
   async joinChat(id: number, chatId: number) {
     const user = await this.userRepository.findOneBy({ id });
     const chat = await this.chatRepository.findOne({
@@ -104,5 +119,10 @@ export class ChatsService {
       throw new NotFoundException('Chat not found!');
     }
     return this.chatRepository.delete(chatId);
+  }
+
+  private extractTokenFromHeader(request: Request): string | undefined {
+    const [type, token] = request.headers.authorization?.split(' ') ?? [];
+    return type === 'Bearer' ? token : undefined;
   }
 }

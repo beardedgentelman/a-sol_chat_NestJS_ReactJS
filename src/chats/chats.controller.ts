@@ -19,16 +19,14 @@ export class ChatsController {
 
   @Post('create-chat')
   async createChat(@Request() req, @Body() chatDto: ChatDto) {
-    const id: number = req.user;
-
-    return this.chatService.createChat(id, chatDto);
+    return this.chatService.createChat(req, chatDto);
   }
 
   @Post(':chatId')
-  async joinChat(@Param('chatId') chatId: number, @Request() req) {
+  async joinChat(@Param('chatId') id: number, @Request() req) {
     const userId: number = req.user;
 
-    return this.chatService.joinChat(userId, chatId);
+    return this.chatService.joinChat(userId, id);
   }
 
   @Delete(':chatId')
