@@ -38,18 +38,31 @@ export class ChatsService {
         id: user.id,
         username: user.name,
         email: user.email,
-        userAvatar: user.avatar,
+        avatar: user.avatar,
       };
       const newChat = this.chatRepository.create({
         ...chatDto,
         ownerId: id,
         users: [userToChat],
       });
+
       return this.chatRepository.save(newChat);
     } catch {
       throw new UnauthorizedException();
     }
   }
+
+  async getChat(id: number) {
+    const chat = await this.chatRepository.findOne({
+      where: { id: id },
+      relations: ['users'],
+    });
+    if (!chat) {
+      throw new NotFoundException('Chat not found!');
+    }
+    return chat;
+  }
+
   async joinChat(id: number, chatId: number) {
     const user = await this.userRepository.findOneBy({ id });
     const chat = await this.chatRepository.findOne({
