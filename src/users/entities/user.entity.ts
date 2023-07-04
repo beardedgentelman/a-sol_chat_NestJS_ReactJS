@@ -23,7 +23,7 @@ export class UserEntity {
   @Column({ name: 'password', type: 'varchar' })
   password: string;
 
-  @Column({ name: 'userAvatar', type: 'bytea', nullable: true })
+  @Column({ name: 'avatar', type: 'bytea', nullable: true })
   avatar: string;
 
   @ManyToMany(() => ChatEntity, (chat) => chat.users)

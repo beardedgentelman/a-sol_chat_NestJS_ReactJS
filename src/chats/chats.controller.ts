@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Param,
   Post,
   Request,
@@ -20,6 +21,13 @@ export class ChatsController {
   @Post('create-chat')
   async createChat(@Request() req, @Body() chatDto: ChatDto) {
     return this.chatService.createChat(req, chatDto);
+  }
+
+  @Get(':chatId')
+  async getChat(@Param() par) {
+    const { chatId } = par;
+
+    return this.chatService.getChat(chatId);
   }
 
   @Post(':chatId')

@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from 'src/users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ChatsModule } from './chats/chats.module';
 import { TypeOrmModule } from './db/typeorm.module';
-import { MongooseModule } from '@nestjs/mongoose';
-import { MessagesModule } from './messages/message.module';
-import { ConfigModule } from '@nestjs/config';
 import { GatewayModule } from './gateway/gateway.module';
+import { MessagesModule } from './messages/message.module';
 
 @Module({
   imports: [
@@ -21,5 +21,6 @@ import { GatewayModule } from './gateway/gateway.module';
   ],
   controllers: [],
   providers: [],
+  exports: [GatewayModule],
 })
 export class AppModule {}

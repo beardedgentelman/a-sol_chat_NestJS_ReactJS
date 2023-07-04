@@ -5,7 +5,7 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway(8082, {
   cors: {
@@ -20,15 +20,19 @@ export class ChatGateway implements OnModuleInit {
   server: Server;
 
   onModuleInit() {
-    this.server.on('connection', (socket) => {
-      // console.log(socket.id);
-      // console.log('Connected');
+    this.server.on('connection', (socket: Socket) => {
+      console.log('Connected with id: ', socket.id);
+
+      socket.on('joinRoom', (room: string) => {
+        socket.join(room);
+        console.log(`Socket ${socket.id} joined room ${room}`);
+      });
     });
   }
 
   @SubscribeMessage('newMessage')
   onNewMessage(@MessageBody() body: any) {
-    this.server.emit('onMessage', body);
-    console.log(body);
+    const { room, message } = body;
+    this.server.to(room).emit('onMessage', message);
   }
 }
