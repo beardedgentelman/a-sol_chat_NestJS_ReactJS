@@ -31,10 +31,9 @@ export class ChatsController {
   }
 
   @Post(':chatId')
-  async joinChat(@Param('chatId') id: number, @Request() req) {
-    const userId: number = req.user;
-
-    return this.chatService.joinChat(userId, id);
+  async joinChat(@Param('chatId') chatId: number, @Body() body) {
+    const userId = body.userId;
+    return this.chatService.joinChat(chatId, userId);
   }
 
   @Delete(':chatId')

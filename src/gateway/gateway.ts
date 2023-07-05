@@ -21,11 +21,12 @@ export class ChatGateway implements OnModuleInit {
 
   onModuleInit() {
     this.server.on('connection', (socket: Socket) => {
-      console.log('Connected with id: ', socket.id);
+      // console.log('Connected with id: ', socket.id);
 
       socket.on('joinRoom', (room: string) => {
         socket.join(room);
-        console.log(`Socket ${socket.id} joined room ${room}`);
+        // console.log(`Socket ${socket.id} joined room ${room}`);
+        socket.broadcast.to(room).emit('reloadPage');
       });
     });
   }

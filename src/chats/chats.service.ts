@@ -63,7 +63,7 @@ export class ChatsService {
     return chat;
   }
 
-  async joinChat(id: number, chatId: number) {
+  async joinChat(chatId: number, id: number) {
     const user = await this.userRepository.findOneBy({ id });
     const chat = await this.chatRepository.findOne({
       where: { id: chatId },
@@ -75,7 +75,6 @@ export class ChatsService {
     if (!chat) {
       throw new NotFoundException('Chat not found!');
     }
-    console.log(chat.users);
     const isUserInChat = chat.users.some((cUser) => cUser.id === user.id);
     if (isUserInChat) {
       throw new ConflictException('You are already in this chat');
