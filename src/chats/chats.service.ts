@@ -8,7 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Request } from 'express';
 import { UserEntity } from 'src/users/entities/user.entity';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { ChatDto } from './dto/chat.dto';
 import { ChatEntity } from './entities/chat.entity';
 
@@ -34,12 +34,7 @@ export class ChatsService {
 
       const id = decodedToken.id;
       const user = await this.userRepository.findOneBy({ id });
-      const userToChat = {
-        id: user.id,
-        username: user.name,
-        email: user.email,
-        avatar: user.avatar,
-      };
+      const userToChat = user;
       const newChat = this.chatRepository.create({
         ...chatDto,
         ownerId: id,
@@ -61,6 +56,21 @@ export class ChatsService {
       throw new NotFoundException('Chat not found!');
     }
     return chat;
+  }
+
+  async searchChat(val: string) {
+    try {
+      const chats = await this.chatRepository.find({
+        where: { name: ILike(`%${val}%`) },
+        relations: ['users'],
+      });
+      if (chats.length === 0) {
+        throw new NotFoundException('Chats not found!');
+      }
+      return chats;
+    } catch (error) {
+      return error;
+    }
   }
 
   async joinChat(chatId: number, id: number) {

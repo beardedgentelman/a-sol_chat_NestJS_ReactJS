@@ -21,6 +21,6 @@ import { MessagesModule } from './messages/message.module';
   ],
   controllers: [],
   providers: [],
-  exports: [GatewayModule],
+  exports: [],
 })
 export class AppModule {}
