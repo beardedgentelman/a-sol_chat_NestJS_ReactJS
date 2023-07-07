@@ -6,6 +6,7 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { ChatsService } from 'src/chats/chats.service';
 
 @WebSocketGateway(8082, {
   cors: {
@@ -16,6 +17,7 @@ import { Server, Socket } from 'socket.io';
   },
 })
 export class ChatGateway implements OnModuleInit {
+  constructor(private readonly chatsService: ChatsService) {}
   @WebSocketServer()
   server: Server;
 
@@ -27,6 +29,12 @@ export class ChatGateway implements OnModuleInit {
         socket.join(room);
         // console.log(`Socket ${socket.id} joined room ${room}`);
         socket.broadcast.to(room).emit('reloadPage');
+      });
+
+      socket.on('chatsSearch', async (value: string) => {
+        const result = await this.chatsService.searchChat(value);
+
+        socket.emit('chatsSearchResult', result);
       });
     });
   }

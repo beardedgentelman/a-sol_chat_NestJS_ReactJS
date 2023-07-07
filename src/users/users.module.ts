@@ -17,7 +17,7 @@ import { UsersService } from './users.service';
           signOptions: { expiresIn: ConfigService.get('EXPIRES_IN') },
         };
       },
-    }),
+    }), // ????
   ],
   controllers: [UsersController],
   providers: [UsersService],
