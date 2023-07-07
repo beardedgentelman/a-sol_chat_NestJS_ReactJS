@@ -6,20 +6,7 @@ import { ChatsController } from './chats.controller';
 import { ChatsService } from './chats.service';
 
 @Module({
-  imports: [
-    ChatRepository,
-    UserRepository,
-    // JwtModule.registerAsync({
-    //   imports: [ConfigModule],
-    //   inject: [ConfigService],
-    //   useFactory: async (ConfigService: ConfigService) => {
-    //     return {
-    //       secret: ConfigService.get('SECRET_KEY'),
-    //       signOptions: { expiresIn: ConfigService.get('EXPIRES_IN') },
-    //     };
-    //   },
-    // }), // ????
-  ],
+  imports: [ChatRepository, UserRepository],
   providers: [ChatsService, JwtService],
   controllers: [ChatsController],
   exports: [ChatsService],

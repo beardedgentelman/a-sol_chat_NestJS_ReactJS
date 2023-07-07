@@ -7,6 +7,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { ChatsService } from 'src/chats/chats.service';
+import { MessageService } from 'src/messages/message.service';
 
 @WebSocketGateway(8082, {
   cors: {
@@ -17,7 +18,10 @@ import { ChatsService } from 'src/chats/chats.service';
   },
 })
 export class ChatGateway implements OnModuleInit {
-  constructor(private readonly chatsService: ChatsService) {}
+  constructor(
+    private readonly chatsService: ChatsService,
+    private readonly messageService: MessageService,
+  ) {}
   @WebSocketServer()
   server: Server;
 
@@ -43,5 +47,6 @@ export class ChatGateway implements OnModuleInit {
   onNewMessage(@MessageBody() body: any) {
     const { room, message } = body;
     this.server.to(room).emit('onMessage', message);
+    this.messageService.createMessage(message);
   }
 }
