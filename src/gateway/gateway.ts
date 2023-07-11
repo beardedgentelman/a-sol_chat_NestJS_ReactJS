@@ -47,6 +47,8 @@ export class ChatGateway implements OnModuleInit {
   onNewMessage(@MessageBody() body: any) {
     const { room, message } = body;
     this.server.to(room).emit('onMessage', message);
-    this.messageService.createMessage(message);
+    if (message.text !== '') {
+      this.messageService.createMessage(message);
+    }
   }
 }
