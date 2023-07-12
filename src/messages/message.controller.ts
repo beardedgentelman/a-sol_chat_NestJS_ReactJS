@@ -1,16 +1,7 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  Request,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { MessageService } from './message.service';
 import { Message } from './schemas/message.schema';
-import { CreateMessageDto } from './dto/createMessage.dto';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 
 @UseGuards(JwtAuthGuard)
 @Controller('message')
@@ -27,16 +18,9 @@ export class MessageController {
     return this.messageService.getMessages();
   }
 
-  @Post()
-  async createMessage(
-    @Body() createMessage: CreateMessageDto,
-    @Request() req,
-  ): Promise<Message> {
-    const userId: number = req.user;
-    return this.messageService.createMessage(
-      createMessage.chatId,
-      userId,
-      createMessage.messageText,
-    );
-  }
+  // @Post()
+  // async createMessage(@Body() messageBody: CreateMessageDto, @Request() req) {
+  //   const userId: number = req.user;
+  //   // return this.messageService.createMessage(messageBody);
+  // }
 }

@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { HydratedDocument } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
 
-export type MessageDocument = Message & Document;
+export type MessageDocument = HydratedDocument<Message>;
 
 @Schema()
 export class Message {
@@ -18,8 +18,8 @@ export class Message {
   @Prop()
   userId: number;
 
-  @Prop({ default: Date.now })
-  date: Date;
+  @Prop({ default: Date.UTC })
+  date: string;
 
   @Prop({ default: true })
   isSend: boolean;
