@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { v4 as uuidv4 } from 'uuid';
 import { CreateMessageDto } from './dto/createMessage.dto';
 import { MessagesRepository } from './message.repository';
 import { Message } from './schemas/message.schema';
@@ -8,18 +7,41 @@ import { Message } from './schemas/message.schema';
 export class MessageService {
   constructor(private readonly messageRepository: MessagesRepository) {}
 
-  async getMessageById(messageId: string): Promise<Message> {
-    return await this.messageRepository.findMessage({ messageId });
+  async getChatMessages(chatId: string): Promise<Message[]> {
+    return await this.messageRepository.findMessages({ chatId });
   }
 
-  async getMessages(): Promise<Message[]> {
-    return await this.messageRepository.find({});
+  async msgIndexDBComparison(chatId: number, messagesBody) {
+    const messagesDB = await this.messageRepository.findMessages({ chatId });
+    messagesDB.sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+    );
+
+    const last100Messages = messagesDB.slice(-100);
+
+    for (const message of last100Messages) {
+      const messageDate = new Date(message.date);
+
+      for (const bodyMessage of messagesBody) {
+        const bodyMessageDate = new Date(bodyMessage.date);
+
+        if (messageDate.getTime() === bodyMessageDate.getTime()) {
+          return true;
+        }
+      }
+    }
+
+    return last100Messages;
+  }
+
+  async getAllMessages(): Promise<Message[]> {
+    return await this.messageRepository.findAll({});
   }
 
   async createMessage(messageBody: CreateMessageDto): Promise<Message> {
     const message: Message = {
       chatId: messageBody.chatId,
-      messageId: uuidv4(),
+      messageId: messageBody.id,
       messageText: messageBody.text,
       userId: messageBody.userId,
       date: new Date().toString(),

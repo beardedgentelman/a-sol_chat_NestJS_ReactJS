@@ -9,13 +9,13 @@ export class MessagesRepository {
     @InjectModel(Message.name) private messageModel: Model<MessageDocument>,
   ) {}
 
-  async findMessage(
+  async findMessages(
     messageFilterQuery: FilterQuery<Message>,
-  ): Promise<Message> {
-    return this.messageModel.findOne(messageFilterQuery);
+  ): Promise<Message[]> {
+    return this.messageModel.find(messageFilterQuery);
   }
 
-  async find(messageFilterQuery: FilterQuery<Message>): Promise<Message[]> {
+  async findAll(messageFilterQuery: FilterQuery<Message>): Promise<Message[]> {
     return this.messageModel.find(messageFilterQuery);
   }
 

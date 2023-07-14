@@ -29,10 +29,21 @@ export class ChatGateway implements OnModuleInit {
     this.server.on('connection', (socket: Socket) => {
       // console.log('Connected with id: ', socket.id);
 
-      socket.on('joinRoom', (room: string) => {
+      socket.on('joinRoom', async (room: string) => {
         socket.join(room);
-        // console.log(`Socket ${socket.id} joined room ${room}`);
+
         socket.broadcast.to(room).emit('reloadPage');
+      });
+
+      socket.on('getMessages', async (messComparison) => {
+        const { chatId, filteredMessages } = messComparison;
+
+        const result = await this.messageService.msgIndexDBComparison(
+          +chatId,
+          filteredMessages,
+        );
+
+        socket.emit('getMessagesResult', result);
       });
 
       socket.on('chatsSearch', async (value: string) => {
